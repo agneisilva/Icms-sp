@@ -1,0 +1,138 @@
+<html>
+  <head>
+    <title>ICMS</title>
+    <style>
+      .dark_mode {
+        background-color: #000;
+        color: #fff;
+      }
+      .dark_mode textarea {
+        background-color: #000;
+        color: #fff;
+      }
+      .dark_mode input {
+        background-color: #000;
+        color: #fff;
+      }
+
+      .console_mode {
+        background-color: #000;
+        color: #0f0;
+      }
+      .console_mode textarea {
+        background-color: #000;
+        color: #0f0;
+      }
+      .console_mode input {
+        background-color: #000;
+        color: #0f0;
+      }
+    </style>
+  </head>
+  <body class="">
+    <div style="width: 800px; margin: auto">
+      <div style="width: 150px; display: flex">
+        <input
+          type="button"
+          value=" Aa "
+          style="background-color: #fff; color: #000"
+          onclick="setStyle('none')"
+        /><br />
+        <input
+          type="button"
+          value=" Aa "
+          style="background-color: #000; color: #fff"
+          onclick="setStyle('dark_mode')"
+        /><br />
+        <input
+          type="button"
+          value=" Aa "
+          style="background-color: #000; color: #0f0"
+          onclick="setStyle('console_mode')"
+        /><br />
+      </div>
+      <br />
+      <div style="width: 650px">
+        Valor da NF: <input id="NFValor" type="number" />
+        <input
+          id="btcalc"
+          value="Calcular"
+          type="button"
+          onclick="calcular()"
+        />
+        <input
+          id="btcalc"
+          value="Limpar Log"
+          type="button"
+          onclick="clearLog()"
+        />
+        <span id="spanresult"></span>
+        <br />
+        <br />
+        <textarea id="log" style="width: 650px; min-height: 400px"> </textarea>
+      </div>
+    </div>
+    <script>
+      var input = document.getElementById("NFValor");
+
+      input.addEventListener("keyup", function (event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          document.getElementById("btcalc").click();
+        }
+      });
+
+      function calcular() {
+        var valorNf = document.getElementById("NFValor").value;
+
+        if (!valorNf) {
+          alert("Digite um valor");
+          return -1;
+        }
+
+        var perBaseCalculoIcms = 0.2611;
+        var perIcms = 0.18;
+        var result1 = valorNf - valorNf * perBaseCalculoIcms;
+        var result2 = result1 * perIcms;
+
+        var old = document.getElementById("log").value;
+
+        var x =
+          "R$" +
+          formtN(valorNf) +
+          " (valor total da NF) - 26,11% (base de cálculo ICMS) = R$ " +
+          formtN(result1) +
+          " \n" +
+          "R$" +
+          formtN(result1) +
+          " x 18 % = R$ " +
+          formtN(result2) +
+          "(Valor do ICMS)";
+
+        var result =
+          x +
+          "\n-------------------------------------------------------\n" +
+          old;
+
+        document.getElementById("log").value = result;
+        document.getElementById("spanresult").innerHTML =
+          "Resultado: " + formtN(result2);
+      }
+
+      function setStyle(style) {
+        document.getElementsByTagName("body")[0].setAttribute("class", style);
+      }
+
+      function clearLog() {
+        document.getElementById("log").value = "";
+        document.getElementById("spanresult").innerHTML = "";
+        document.getElementById("NFValor").value = "";
+      }
+
+      function formtN(n) {
+        return Math.trunc(n * 100) / 100;
+      }
+    </script>
+  </body>
+</html>
